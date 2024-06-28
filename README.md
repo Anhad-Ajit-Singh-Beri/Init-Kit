@@ -34,17 +34,17 @@ initKit is a project setup script that automates the initialization of different
    git clone https://github.com/Anhad-Ajit-Singh-Beri/Init-Kit.git
    cd InitKit
 
-2. Make the script executable:
+2. Make the script executable (Unix and Unix-Like OS):
    ```
-   chmod +x create_project.sh
+   chmod +x create.sh
 
 ## Usage
 ### Running the Script
- - Open your terminal or Git Bash (Windows) and navigate to the directory where create_project.sh is located.
+ - Open your terminal or Git Bash (Windows) and navigate to the directory where create.sh is located.
 
 **Run the script:**
   ```
-    ./create_project.sh
+    ./create.sh
 ```
 
 ## Project Types
@@ -69,7 +69,7 @@ initKit is a project setup script that automates the initialization of different
 **Creating a Web App**
 
 ```
-  ./create_project.sh
+  ./create.sh
 ```
 
 1. Select "Web App" when prompted.
