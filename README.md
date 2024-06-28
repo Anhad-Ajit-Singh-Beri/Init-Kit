@@ -29,9 +29,10 @@ initKit is a project setup script that automates the initialization of different
 ## Installation
 
 1. Clone the repository to your local machine:
+   Add this file in the directory where you want your projects. 
    ```bash
-   git clone https://github.com/your-username/initKit.git
-   cd initKit
+   git clone https://github.com/Anhad-Ajit-Singh-Beri/Init-Kit.git
+   cd InitKit
 
 2. Make the script executable:
    ```
