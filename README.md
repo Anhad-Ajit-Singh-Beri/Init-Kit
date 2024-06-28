@@ -71,9 +71,11 @@ initKit is a project setup script that automates the initialization of different
   ./create_project.sh
 ```
 
- 1. Select "Web App" when prompted.
- 2. Enter the project name (e.g., MyWebApp).
- 3. Choose the libraries/frameworks to add (e.g., jQuery, Bootstrap).
+1. Select "Web App" when prompted.
+2. Enter the project name (e.g., MyWebApp).
+3. Choose the libraries/frameworks to add (e.g., jQuery, Bootstrap).
+4. Your project is ready to use!
+
 
 
 
