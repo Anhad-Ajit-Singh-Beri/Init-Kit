@@ -1,12 +1,29 @@
 #!/bin/bash
 
+# Logging setup
+LOG_FILE="initKit.log"
+
+# Function to log messages
+log_message() {
+    local timestamp=$(date +"%Y-%m-%d %T")
+    echo "[$timestamp] $1" >> "$LOG_FILE"
+}
+
+# Function to handle errors
+handle_error() {
+    local error_message="$1"
+    echo "Error: $error_message" >&2
+    log_message "Error: $error_message"
+    exit 1
+}
+
 # Function to create a web app project
 create_web_app() {
-    mkdir -p "$PROJECT_NAME"
-    cd "$PROJECT_NAME" || exit
+    mkdir -p "$PROJECT_NAME" || handle_error "Failed to create directory $PROJECT_NAME"
+    cd "$PROJECT_NAME" || handle_error "Failed to change directory to $PROJECT_NAME"
 
     echo "Creating index.html..."
-    cat > index.html <<EOF
+    cat > index.html <<EOF || handle_error "Failed to create index.html"
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,16 +40,16 @@ create_web_app() {
 EOF
 
     echo "Creating style.css..."
-    cat > style.css <<EOF
-*{
-box-sizing: border-box;
-padding: 0;
-margin: 0;
+    cat > style.css <<EOF || handle_error "Failed to create style.css"
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
 }
 EOF
 
     echo "Creating app.js..."
-    touch app.js
+    touch app.js || handle_error "Failed to create app.js"
 
     echo "Select libraries/frameworks to add:"
     echo "1. jQuery"
@@ -43,31 +60,32 @@ EOF
     for CHOICE in $CHOICES; do
         case $CHOICE in
             1)
-                echo "<script src=\"https://code.jquery.com/jquery-3.6.0.min.js\"></script>" >> index.html
+                echo "<script src=\"https://code.jquery.com/jquery-3.6.0.min.js\"></script>" >> index.html || handle_error "Failed to add jQuery to index.html"
                 ;;
             2)
-                echo "<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\">" >> index.html
-                echo "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js\"></script>" >> index.html
+                echo "<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\">" >> index.html || handle_error "Failed to add Bootstrap CSS to index.html"
+                echo "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js\"></script>" >> index.html || handle_error "Failed to add Bootstrap JS to index.html"
                 ;;
             3)
-                echo "<link href=\"https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css\" rel=\"stylesheet\">" >> index.html
+                echo "<link href=\"https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css\" rel=\"stylesheet\">" >> index.html || handle_error "Failed to add Tailwind CSS to index.html"
                 ;;
             *)
-                echo "Invalid choice: $CHOICE"
+                handle_error "Invalid choice: $CHOICE"
                 ;;
         esac
     done
 
     echo "Web app project created successfully."
+    log_message "Web app project '$PROJECT_NAME' created successfully."
 }
 
 # Function to create a Python script project
 create_python_script() {
-    mkdir -p "$PROJECT_NAME"
-    cd "$PROJECT_NAME" || exit
+    mkdir -p "$PROJECT_NAME" || handle_error "Failed to create directory $PROJECT_NAME"
+    cd "$PROJECT_NAME" || handle_error "Failed to change directory to $PROJECT_NAME"
 
     echo "Creating main.py..."
-    cat > main.py <<EOF
+    cat > main.py <<EOF || handle_error "Failed to create main.py"
 #!/usr/bin/env python3
 
 def main():
@@ -86,36 +104,37 @@ EOF
     for CHOICE in $CHOICES; do
         case $CHOICE in
             1)
-                pip install requests
-                echo "import requests" >> main.py
+                pip install requests || handle_error "Failed to install Requests"
+                echo "import requests" >> main.py || handle_error "Failed to add Requests import to main.py"
                 ;;
             2)
-                pip install flask
-                echo "from flask import Flask" >> main.py
+                pip install flask || handle_error "Failed to install Flask"
+                echo "from flask import Flask" >> main.py || handle_error "Failed to add Flask import to main.py"
                 ;;
             3)
-                pip install numpy
-                echo "import numpy as np" >> main.py
+                pip install numpy || handle_error "Failed to install NumPy"
+                echo "import numpy as np" >> main.py || handle_error "Failed to add NumPy import to main.py"
                 ;;
             *)
-                echo "Invalid choice: $CHOICE"
+                handle_error "Invalid choice: $CHOICE"
                 ;;
         esac
     done
 
     echo "Python script project created successfully."
+    log_message "Python script project '$PROJECT_NAME' created successfully."
 }
 
 # Function to create a Node.js app project
 create_node_app() {
-    mkdir -p "$PROJECT_NAME"
-    cd "$PROJECT_NAME" || exit
+    mkdir -p "$PROJECT_NAME" || handle_error "Failed to create directory $PROJECT_NAME"
+    cd "$PROJECT_NAME" || handle_error "Failed to change directory to $PROJECT_NAME"
 
     echo "Initializing npm..."
-    npm init -y > /dev/null 2>&1
+    npm init -y > /dev/null 2>&1 || handle_error "Failed to initialize npm"
 
     echo "Creating index.js..."
-    cat > index.js <<EOF
+    cat > index.js <<EOF || handle_error "Failed to create index.js"
 console.log('Welcome to $PROJECT_NAME');
 EOF
 
@@ -128,24 +147,25 @@ EOF
     for CHOICE in $CHOICES; do
         case $CHOICE in
             1)
-                npm install express
-                echo "const express = require('express');" >> index.js
+                npm install express || handle_error "Failed to install Express"
+                echo "const express = require('express');" >> index.js || handle_error "Failed to add Express import to index.js"
                 ;;
             2)
-                npm install body-parser
-                echo "const bodyParser = require('body-parser');" >> index.js
+                npm install body-parser || handle_error "Failed to install Body-parser"
+                echo "const bodyParser = require('body-parser');" >> index.js || handle_error "Failed to add Body-parser import to index.js"
                 ;;
             3)
-                npm install mongoose
-                echo "const mongoose = require('mongoose');" >> index.js
+                npm install mongoose || handle_error "Failed to install Mongoose"
+                echo "const mongoose = require('mongoose');" >> index.js || handle_error "Failed to add Mongoose import to index.js"
                 ;;
             *)
-                echo "Invalid choice: $CHOICE"
+                handle_error "Invalid choice: $CHOICE"
                 ;;
         esac
     done
 
     echo "Node.js app project created successfully."
+    log_message "Node.js app project '$PROJECT_NAME' created successfully."
 }
 
 # Main script logic
@@ -168,7 +188,6 @@ case $PROJECT_TYPE in
         create_node_app
         ;;
     *)
-        echo "Invalid choice. Exiting..."
-        exit 1
+        handle_error "Invalid choice. Exiting..."
         ;;
 esac
