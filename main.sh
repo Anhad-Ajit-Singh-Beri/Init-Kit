@@ -81,11 +81,41 @@ EOF
         esac
     done
 
+    echo "Creating .gitignore file..."
+    create_gitignore || handle_error "Failed to create .gitignore file"
+
     echo "Web app project created successfully."
     log_message "Web app project '$PROJECT_NAME' created successfully."
 }
 
-# Function to create a Python script project
+
+create_gitignore() {
+    cat > .gitignore <<EOF
+# Ignore npm modules
+node_modules/
+EOF
+}
+
+create_editorconfig() {
+    cat > .editorconfig <<EOF
+# Editor configuration, see http://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 4
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.md]
+max_line_length = off
+trim_trailing_whitespace = false
+EOF
+}
+
+
 create_python_script() {
     mkdir -p "$PROJECT_NAME" || handle_error "Failed to create directory $PROJECT_NAME"
     cd "$PROJECT_NAME" || handle_error "Failed to change directory to $PROJECT_NAME"
@@ -127,11 +157,13 @@ EOF
         esac
     done
 
+    echo "Creating .gitignore file..."
+    create_gitignore || handle_error "Failed to create .gitignore file"
+
     echo "Python script project created successfully."
     log_message "Python script project '$PROJECT_NAME' created successfully."
 }
 
-# Function to create a Node.js app project
 create_node_app() {
     mkdir -p "$PROJECT_NAME" || handle_error "Failed to create directory $PROJECT_NAME"
     cd "$PROJECT_NAME" || handle_error "Failed to change directory to $PROJECT_NAME"
@@ -170,11 +202,13 @@ EOF
         esac
     done
 
+    echo "Creating .gitignore file..."
+    create_gitignore || handle_error "Failed to create .gitignore file"
+
     echo "Node.js app project created successfully."
     log_message "Node.js app project '$PROJECT_NAME' created successfully."
 }
 
-# Main script logic
 echo "Select the type of project you want to create:"
 echo "1. Web App"
 echo "2. Python Script"
@@ -198,7 +232,6 @@ case $PROJECT_TYPE in
         ;;
 esac
 
-# Initialize Git repository if user agrees
 read -p "Initialize Git repository? (y/n): " INITIALIZE_GIT
 if [[ $INITIALIZE_GIT =~ ^[Yy]$ ]]; then
     initialize_git
