@@ -23,6 +23,75 @@ initialize_git() {
     log_message "Initialized Git repository."
 }
 
+# Function to create README.md file
+create_readme() {
+    cat > README.md <<EOF || handle_error "Failed to create README.md"
+# $PROJECT_NAME
+
+## Description
+Describe your project here.
+
+## Installation
+Provide installation instructions here.
+
+## Usage
+Provide usage instructions here.
+
+## Contributing
+Provide guidelines for contributing to your project.
+
+## License
+This project is licensed under the $LICENSE_TYPE License.
+EOF
+}
+
+# Function to create LICENSE.txt file
+create_license() {
+    case $LICENSE_TYPE in
+        "MIT")
+            LICENSE_TEXT="MIT License
+
+Copyright (c) Year(s), Author
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the \"Software\"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE."
+            ;;
+        "GPL")
+            LICENSE_TEXT="GPL License
+
+This is a placeholder for the GPL License text. Replace it with the actual GPL License text."
+            ;;
+        *)
+            handle_error "Unsupported license type: $LICENSE_TYPE"
+            ;;
+    esac
+
+    echo "$LICENSE_TEXT" > LICENSE.txt || handle_error "Failed to create LICENSE.txt"
+}
+
+# Function to create .gitignore file
+create_gitignore() {
+    cat > .gitignore <<EOF
+# Ignore npm modules
+node_modules/
+EOF
+}
+
 # Function to create a web app project
 create_web_app() {
     mkdir -p "$PROJECT_NAME" || handle_error "Failed to create directory $PROJECT_NAME"
@@ -84,38 +153,17 @@ EOF
     echo "Creating .gitignore file..."
     create_gitignore || handle_error "Failed to create .gitignore file"
 
+    echo "Creating README.md file..."
+    create_readme || handle_error "Failed to create README.md"
+
+    echo "Creating LICENSE.txt file..."
+    create_license || handle_error "Failed to create LICENSE.txt"
+
     echo "Web app project created successfully."
     log_message "Web app project '$PROJECT_NAME' created successfully."
 }
 
-
-create_gitignore() {
-    cat > .gitignore <<EOF
-# Ignore npm modules
-node_modules/
-EOF
-}
-
-create_editorconfig() {
-    cat > .editorconfig <<EOF
-# Editor configuration, see http://editorconfig.org
-root = true
-
-[*]
-charset = utf-8
-indent_style = space
-indent_size = 4
-end_of_line = lf
-insert_final_newline = true
-trim_trailing_whitespace = true
-
-[*.md]
-max_line_length = off
-trim_trailing_whitespace = false
-EOF
-}
-
-
+# Function to create a Python script project
 create_python_script() {
     mkdir -p "$PROJECT_NAME" || handle_error "Failed to create directory $PROJECT_NAME"
     cd "$PROJECT_NAME" || handle_error "Failed to change directory to $PROJECT_NAME"
@@ -160,10 +208,17 @@ EOF
     echo "Creating .gitignore file..."
     create_gitignore || handle_error "Failed to create .gitignore file"
 
+    echo "Creating README.md file..."
+    create_readme || handle_error "Failed to create README.md"
+
+    echo "Creating LICENSE.txt file..."
+    create_license || handle_error "Failed to create LICENSE.txt"
+
     echo "Python script project created successfully."
     log_message "Python script project '$PROJECT_NAME' created successfully."
 }
 
+# Function to create a Node.js app project
 create_node_app() {
     mkdir -p "$PROJECT_NAME" || handle_error "Failed to create directory $PROJECT_NAME"
     cd "$PROJECT_NAME" || handle_error "Failed to change directory to $PROJECT_NAME"
@@ -205,10 +260,17 @@ EOF
     echo "Creating .gitignore file..."
     create_gitignore || handle_error "Failed to create .gitignore file"
 
+    echo "Creating README.md file..."
+    create_readme || handle_error "Failed to create README.md"
+
+    echo "Creating LICENSE.txt file..."
+    create_license || handle_error "Failed to create LICENSE.txt"
+
     echo "Node.js app project created successfully."
     log_message "Node.js app project '$PROJECT_NAME' created successfully."
 }
 
+# Main script logic
 echo "Select the type of project you want to create:"
 echo "1. Web App"
 echo "2. Python Script"
@@ -216,6 +278,8 @@ echo "3. Node.js App"
 read -p "Enter the number corresponding to your choice: " PROJECT_TYPE
 
 read -p "Enter the project name: " PROJECT_NAME
+
+read -p "Choose a license for your project (e.g., MIT, GPL): " LICENSE_TYPE
 
 case $PROJECT_TYPE in
     1)
@@ -232,6 +296,7 @@ case $PROJECT_TYPE in
         ;;
 esac
 
+# Initialize Git repository if user agrees
 read -p "Initialize Git repository? (y/n): " INITIALIZE_GIT
 if [[ $INITIALIZE_GIT =~ ^[Yy]$ ]]; then
     initialize_git
