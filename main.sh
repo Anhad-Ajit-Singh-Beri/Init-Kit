@@ -17,6 +17,12 @@ handle_error() {
     exit 1
 }
 
+# Function to initialize Git repository
+initialize_git() {
+    git init > /dev/null 2>&1 || handle_error "Failed to initialize Git repository"
+    log_message "Initialized Git repository."
+}
+
 # Function to create a web app project
 create_web_app() {
     mkdir -p "$PROJECT_NAME" || handle_error "Failed to create directory $PROJECT_NAME"
@@ -191,3 +197,9 @@ case $PROJECT_TYPE in
         handle_error "Invalid choice. Exiting..."
         ;;
 esac
+
+# Initialize Git repository if user agrees
+read -p "Initialize Git repository? (y/n): " INITIALIZE_GIT
+if [[ $INITIALIZE_GIT =~ ^[Yy]$ ]]; then
+    initialize_git
+fi
