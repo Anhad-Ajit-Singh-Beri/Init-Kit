@@ -34,7 +34,7 @@ initKit is a project setup script that automates the initialization of different
    git clone https://github.com/Anhad-Ajit-Singh-Beri/Init-Kit.git
    cd InitKit
 
-2. Make the script executable:
+2. Make the script executable (Unix and Unix-Like OS):
    ```
    chmod +x create_project.sh
 
