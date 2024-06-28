@@ -279,7 +279,7 @@ read -p "Enter the number corresponding to your choice: " PROJECT_TYPE
 
 read -p "Enter the project name: " PROJECT_NAME
 
-read -p "Choose a license for your project (e.g., MIT, GPL): " LICENSE_TYPE
+read -p "Choose a license for your project: " LICENSE_TYPE
 
 case $PROJECT_TYPE in
     1)
