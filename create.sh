@@ -92,182 +92,112 @@ node_modules/
 EOF
 }
 
-# Function to create a web app project
-create_web_app() {
+# Function to create a web app project from a custom template or default
+create_web_app_from_template() {
+    local template_dir="$1"
+
+    if [[ ! -d "$template_dir" ]]; then
+        handle_error "Template directory '$template_dir' not found."
+    fi
+
     mkdir -p "$PROJECT_NAME" || handle_error "Failed to create directory $PROJECT_NAME"
     cd "$PROJECT_NAME" || handle_error "Failed to change directory to $PROJECT_NAME"
 
-    echo "Creating index.html..."
-    cat > index.html <<EOF || handle_error "Failed to create index.html"
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>$PROJECT_NAME</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <h1>Welcome to $PROJECT_NAME</h1>
-    <script src="app.js"></script>
-</body>
-</html>
-EOF
-
-    echo "Creating style.css..."
-    cat > style.css <<EOF || handle_error "Failed to create style.css"
-* {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-}
-EOF
-
-    echo "Creating app.js..."
-    touch app.js || handle_error "Failed to create app.js"
-
-    echo "Select libraries/frameworks to add:"
-    echo "1. jQuery"
-    echo "2. Bootstrap"
-    echo "3. Tailwind CSS"
-    read -p "Enter the numbers corresponding to your choices (space-separated): " CHOICES
-
-    for CHOICE in $CHOICES; do
-        case $CHOICE in
-            1)
-                echo "<script src=\"https://code.jquery.com/jquery-3.6.0.min.js\"></script>" >> index.html || handle_error "Failed to add jQuery to index.html"
-                ;;
-            2)
-                echo "<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\">" >> index.html || handle_error "Failed to add Bootstrap CSS to index.html"
-                echo "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js\"></script>" >> index.html || handle_error "Failed to add Bootstrap JS to index.html"
-                ;;
-            3)
-                echo "<link href=\"https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css\" rel=\"stylesheet\">" >> index.html || handle_error "Failed to add Tailwind CSS to index.html"
-                ;;
-            *)
-                handle_error "Invalid choice: $CHOICE"
-                ;;
-        esac
-    done
-
-    echo "Creating .gitignore file..."
-    create_gitignore || handle_error "Failed to create .gitignore file"
-
-    echo "Creating README.md file..."
-    create_readme || handle_error "Failed to create README.md"
-
-    echo "Creating LICENSE.txt file..."
-    create_license || handle_error "Failed to create LICENSE.txt"
+    # Copy template files from the specified directory
+    cp -r "$template_dir"/* ./ || handle_error "Failed to copy template files"
 
     echo "Web app project created successfully."
     log_message "Web app project '$PROJECT_NAME' created successfully."
 }
 
-# Function to create a Python script project
-create_python_script() {
+# Function to create a Python script project from a custom template or default
+create_python_script_from_template() {
+    local template_dir="$1"
+
+    if [[ ! -d "$template_dir" ]]; then
+        handle_error "Template directory '$template_dir' not found."
+    fi
+
     mkdir -p "$PROJECT_NAME" || handle_error "Failed to create directory $PROJECT_NAME"
     cd "$PROJECT_NAME" || handle_error "Failed to change directory to $PROJECT_NAME"
 
-    echo "Creating main.py..."
-    cat > main.py <<EOF || handle_error "Failed to create main.py"
-#!/usr/bin/env python3
-
-def main():
-    print("Welcome to $PROJECT_NAME")
-
-if __name__ == "__main__":
-    main()
-EOF
-
-    echo "Select libraries/frameworks to add:"
-    echo "1. Requests"
-    echo "2. Flask"
-    echo "3. NumPy"
-    read -p "Enter the numbers corresponding to your choices (space-separated): " CHOICES
-
-    for CHOICE in $CHOICES; do
-        case $CHOICE in
-            1)
-                pip install requests || handle_error "Failed to install Requests"
-                echo "import requests" >> main.py || handle_error "Failed to add Requests import to main.py"
-                ;;
-            2)
-                pip install flask || handle_error "Failed to install Flask"
-                echo "from flask import Flask" >> main.py || handle_error "Failed to add Flask import to main.py"
-                ;;
-            3)
-                pip install numpy || handle_error "Failed to install NumPy"
-                echo "import numpy as np" >> main.py || handle_error "Failed to add NumPy import to main.py"
-                ;;
-            *)
-                handle_error "Invalid choice: $CHOICE"
-                ;;
-        esac
-    done
-
-    echo "Creating .gitignore file..."
-    create_gitignore || handle_error "Failed to create .gitignore file"
-
-    echo "Creating README.md file..."
-    create_readme || handle_error "Failed to create README.md"
-
-    echo "Creating LICENSE.txt file..."
-    create_license || handle_error "Failed to create LICENSE.txt"
+    # Copy template files from the specified directory
+    cp -r "$template_dir"/* ./ || handle_error "Failed to copy template files"
 
     echo "Python script project created successfully."
     log_message "Python script project '$PROJECT_NAME' created successfully."
 }
 
-# Function to create a Node.js app project
-create_node_app() {
+# Function to create a Node.js app project from a custom template or default
+create_node_app_from_template() {
+    local template_dir="$1"
+
+    if [[ ! -d "$template_dir" ]]; then
+        handle_error "Template directory '$template_dir' not found."
+    fi
+
     mkdir -p "$PROJECT_NAME" || handle_error "Failed to create directory $PROJECT_NAME"
     cd "$PROJECT_NAME" || handle_error "Failed to change directory to $PROJECT_NAME"
 
-    echo "Initializing npm..."
-    npm init -y > /dev/null 2>&1 || handle_error "Failed to initialize npm"
-
-    echo "Creating index.js..."
-    cat > index.js <<EOF || handle_error "Failed to create index.js"
-console.log('Welcome to $PROJECT_NAME');
-EOF
-
-    echo "Select libraries/frameworks to add:"
-    echo "1. Express"
-    echo "2. Body-parser"
-    echo "3. Mongoose"
-    read -p "Enter the numbers corresponding to your choices (space-separated): " CHOICES
-
-    for CHOICE in $CHOICES; do
-        case $CHOICE in
-            1)
-                npm install express || handle_error "Failed to install Express"
-                echo "const express = require('express');" >> index.js || handle_error "Failed to add Express import to index.js"
-                ;;
-            2)
-                npm install body-parser || handle_error "Failed to install Body-parser"
-                echo "const bodyParser = require('body-parser');" >> index.js || handle_error "Failed to add Body-parser import to index.js"
-                ;;
-            3)
-                npm install mongoose || handle_error "Failed to install Mongoose"
-                echo "const mongoose = require('mongoose');" >> index.js || handle_error "Failed to add Mongoose import to index.js"
-                ;;
-            *)
-                handle_error "Invalid choice: $CHOICE"
-                ;;
-        esac
-    done
-
-    echo "Creating .gitignore file..."
-    create_gitignore || handle_error "Failed to create .gitignore file"
-
-    echo "Creating README.md file..."
-    create_readme || handle_error "Failed to create README.md"
-
-    echo "Creating LICENSE.txt file..."
-    create_license || handle_error "Failed to create LICENSE.txt"
+    # Copy template files from the specified directory
+    cp -r "$template_dir"/* ./ || handle_error "Failed to copy template files"
 
     echo "Node.js app project created successfully."
     log_message "Node.js app project '$PROJECT_NAME' created successfully."
+}
+
+# Function to create a Java project from a custom template or default
+create_java_project_from_template() {
+    local template_dir="$1"
+
+    if [[ ! -d "$template_dir" ]]; then
+        handle_error "Template directory '$template_dir' not found."
+    fi
+
+    mkdir -p "$PROJECT_NAME/src" || handle_error "Failed to create directory $PROJECT_NAME/src"
+    cd "$PROJECT_NAME" || handle_error "Failed to change directory to $PROJECT_NAME"
+
+    # Copy template files from the specified directory
+    cp -r "$template_dir"/* ./ || handle_error "Failed to copy template files"
+
+    echo "Java project created successfully."
+    log_message "Java project '$PROJECT_NAME' created successfully."
+}
+
+# Function to create a C++ project from a custom template or default
+create_cpp_project_from_template() {
+    local template_dir="$1"
+
+    if [[ ! -d "$template_dir" ]]; then
+        handle_error "Template directory '$template_dir' not found."
+    fi
+
+    mkdir -p "$PROJECT_NAME/src" || handle_error "Failed to create directory $PROJECT_NAME/src"
+    cd "$PROJECT_NAME" || handle_error "Failed to change directory to $PROJECT_NAME"
+
+    # Copy template files from the specified directory
+    cp -r "$template_dir"/* ./ || handle_error "Failed to copy template files"
+
+    echo "C++ project created successfully."
+    log_message "C++ project '$PROJECT_NAME' created successfully."
+}
+
+# Function to create a Ruby project from a custom template or default
+create_ruby_project_from_template() {
+    local template_dir="$1"
+
+    if [[ ! -d "$template_dir" ]]; then
+        handle_error "Template directory '$template_dir' not found."
+    fi
+
+    mkdir -p "$PROJECT_NAME" || handle_error "Failed to create directory $PROJECT_NAME"
+    cd "$PROJECT_NAME" || handle_error "Failed to change directory to $PROJECT_NAME"
+
+    # Copy template files from the specified directory
+    cp -r "$template_dir"/* ./ || handle_error "Failed to copy template files"
+
+    echo "Ruby project created successfully."
+    log_message "Ruby project '$PROJECT_NAME' created successfully."
 }
 
 # Main script logic
@@ -275,29 +205,96 @@ echo "Select the type of project you want to create:"
 echo "1. Web App"
 echo "2. Python Script"
 echo "3. Node.js App"
+echo "4. Java Project"
+echo "5. C++ Project"
+echo "6. Ruby Project"
 read -p "Enter the number corresponding to your choice: " PROJECT_TYPE
 
 read -p "Enter the project name: " PROJECT_NAME
 
-read -p "Choose a license for your project: " LICENSE_TYPE
+read -p "Choose a license for your project (e.g., MIT, GPL): " LICENSE_TYPE
 
-case $PROJECT_TYPE in
-    1)
-        create_web_app
-        ;;
-    2)
-        create_python_script
-        ;;
-    3)
-        create_node_app
-        ;;
-    *)
-        handle_error "Invalid choice. Exiting..."
-        ;;
-esac
+# Prompt to use a custom template or default
+read -p "Do you want to use a custom template? (y/n): " USE_TEMPLATE
+
+if [[ $USE_TEMPLATE =~ ^[Yy]$ ]]; then
+    read -p "Enter the path to your custom template directory: " TEMPLATE_PATH
+
+    case $PROJECT_TYPE in
+        1)
+            create_web_app_from_template "$TEMPLATE_PATH"
+            ;;
+        2)
+            create_python_script_from_template "$TEMPLATE_PATH"
+            ;;
+        3)
+            create_node_app_from_template "$TEMPLATE_PATH"
+            ;;
+        4)
+            create_java_project_from_template "$TEMPLATE_PATH"
+            ;;
+        5)
+            create_cpp_project_from_template "$TEMPLATE_PATH"
+            ;;
+        6)
+            create_ruby_project_from_template "$TEMPLATE_PATH"
+            ;;
+        *)
+            handle_error "Invalid choice. Exiting..."
+            ;;
+    esac
+else
+    case $PROJECT_TYPE in
+        1)
+            # Use default web app template directory
+            DEFAULT_TEMPLATE_DIR="templates/web_app"
+            create_web_app_from_template "$DEFAULT_TEMPLATE_DIR"
+            ;;
+        2)
+            # Use default Python script template directory
+            DEFAULT_TEMPLATE_DIR="templates/python_script"
+            create_python_script_from_template "$DEFAULT_TEMPLATE_DIR"
+            ;;
+        3)
+            # Use default Node.js app template directory
+            DEFAULT_TEMPLATE_DIR="templates/node_app"
+            create_node_app_from_template "$DEFAULT_TEMPLATE_DIR"
+            ;;
+        4)
+            # Use default Java project template directory
+            DEFAULT_TEMPLATE_DIR="templates/java_project"
+            create_java_project_from_template "$DEFAULT_TEMPLATE_DIR"
+            ;;
+        5)
+            # Use default C++ project template directory
+            DEFAULT_TEMPLATE_DIR="templates/cpp_project"
+            create_cpp_project_from_template "$DEFAULT_TEMPLATE_DIR"
+            ;;
+        6)
+            # Use default Ruby project template directory
+            DEFAULT_TEMPLATE_DIR="templates/ruby_project"
+            create_ruby_project_from_template "$DEFAULT_TEMPLATE_DIR"
+            ;;
+        *)
+            handle_error "Invalid choice. Exiting..."
+            ;;
+    esac
+fi
 
 # Initialize Git repository if user agrees
 read -p "Initialize Git repository? (y/n): " INITIALIZE_GIT
 if [[ $INITIALIZE_GIT =~ ^[Yy]$ ]]; then
     initialize_git
 fi
+
+# Create README.md, LICENSE.txt, and .gitignore files
+echo "Creating README.md file..."
+create_readme || handle_error "Failed to create README.md"
+
+echo "Creating LICENSE.txt file..."
+create_license || handle_error "Failed to create LICENSE.txt"
+
+echo "Creating .gitignore file..."
+create_gitignore || handle_error "Failed to create .gitignore"
+
+echo "Project initialization completed successfully."
