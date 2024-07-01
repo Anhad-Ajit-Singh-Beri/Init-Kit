@@ -5,6 +5,10 @@ initKit is a project setup script that automates the initialization of different
 - Web Apps with HTML, CSS, and JavaScript.
 - Python Scripts.
 - Node.js Applications.
+- C++ Projects.
+- Ruby Projects.
+- Java Projects.
+
 
 ## Features
 
